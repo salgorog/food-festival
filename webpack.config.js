@@ -9,22 +9,46 @@ module.exports = {
         events: "./assets/js/events.js",
         schedule: "./assets/js/schedule.js",
         tickets: "./assets/js/tickets.js"
-      },
+    },
 
-      output: {
+    output: {
         filename: "[name].bundle.js",
         path: __dirname + "/dist",
-      },
+    },
+
+    module: {
+        rules: [
+            {
+                test: /\.jpg$/,
+                use: [
+                    {
+                        loader: 'file-loader',
+                        options: {
+                            name(file) {
+                                return '[path][name].[ext]';
+                            },
+                            publicPath: function (url) {
+                                return url.replace('../', '/assets/');
+                            }
+                        }
+                    },
+                    {
+                        loader: 'image-webpack-loader'
+                    }
+                ]
+            }
+        ]
+    },
 
     plugins: [
         new webpack.ProvidePlugin({
-          $: "jquery",
-          jQuery: "jquery"
+            $: "jquery",
+            jQuery: "jquery"
         }),
         new BundleAnalyzerPlugin({
-          analyzerMode: "static", // the report outputs to an HTML file in the dist folder
+            analyzerMode: "static", // the report outputs to an HTML file in the dist folder
         })
-      ],    
+    ],
 
     mode: 'development'
 };
